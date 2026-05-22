@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Restudio Trends</title>
+  <link rel="icon" href="https://i.postimg.cc/66MLbbg8/restudio-profile.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('https://i.postimg.cc/2SkQnW6g/origbig.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: #000000;
+      border-bottom: 2px solid #000000;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand img {
+      height: 44px;
+      width: auto;
+    }
+
+    .brand .trends-word {
+      font-family: 'Tiny5', 'Courier New', monospace;
+      font-size: 2.0rem;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .controls-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .settings-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      padding: 6px;
+      text-decoration: none;
+    }
+
+    .settings-btn svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      fill: #ddd;
+    }
+
+    .settings-btn:hover {
+      background: #2a2a2a;
+      border-color: #888;
+    }
+
+    .settings-btn:hover svg {
+      fill: #fff;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-panel {
+      background: #1a1a1a;
+      border: 1px solid #444;
+      padding: 24px;
+      width: 90%;
+      max-width: 420px;
+      border-radius: 4px;
+      color: #ddd;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-family: 'Tiny5', monospace;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #ddd;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: #2a2a2a;
+      border-color: #888;
+      color: #fff;
+    }
+
+    .setting-group {
+      margin-bottom: 20px;
+    }
+
+    .setting-label {
+      font-family: 'Tiny5', monospace;
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .setting-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .option-btn {
+      background: #111;
+      color: #ddd;
+      border: 1px solid #444;
+      padding: 8px 14px;
+      font-family: 'Tiny5', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-btn.active {
+      background: #333;
+      border-color: #888;
+      color: #fff;
+    }
+
+    .option-btn:hover {
+      background: #2a2a2a;
+    }
+
+    .chart-type-select,
+    .region-select {
+      background: #1a1a1a;
+      color: #ddd;
+      border: 1px solid #444;
+      padding: 10px 16px;
+      font-family: 'Tiny5', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+    }
+
+    .chart-type-select option,
+    .region-select option {
+      background: #1a1a1a;
+      color: #ddd;
+      font-family: monospace;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 24px auto;
+      padding: 0 20px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-family: 'Tiny5', monospace;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ddd;
+      border-bottom: 2px dashed #2a2a2a;
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title svg {
+      width: 26px;
+      height: 26px;
+      fill: #ccc;
+      flex-shrink: 0;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      padding: 10px 16px;
+      color: #ddd;
+      font-family: 'Tiny5', monospace;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: #888;
+    }
+
+    .search-btn {
+      background: #1a1a1a;
+      color: #ddd;
+      border: 1px solid #444;
+      padding: 10px 20px;
+      font-family: 'Tiny5', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .search-btn:hover {
+      background: #2a2a2a;
+      border-color: #888;
+    }
+
+    .clear-search-btn {
+      background: #2a1a1a;
+      color: #e57373;
+      border: 1px solid #5a3e3e;
+      padding: 10px 20px;
+      font-family: 'Tiny5', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .clear-search-btn:hover {
+      background: #3e2a2a;
+      border-color: #cf6679;
+    }
+
+    .region-select-main {
+      background: #1a1a1a;
+      color: #ddd;
+      border: 1px solid #444;
+      padding: 10px 16px;
+      font-family: 'Tiny5', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .region-select-main option {
+      background: #1a1a1a;
+      color: #ddd;
+      font-family: monospace;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Tiny5', monospace;
+      font-size: 1rem;
+      color: #aaa;
+    }
+
+    .info-item svg {
+      width: 20px;
+      height: 20px;
+      fill: #888;
+      flex-shrink: 0;
+    }
+
+    .trends-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+      margin: 16px 0 32px;
+    }
+
+    .card {
+      background: rgba(18, 18, 18, 0.85);
+      border: 1px solid #2c2c2c;
+      padding: 16px;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      border-color: #555;
+      background: rgba(26, 26, 26, 0.9);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .rank-badge {
+      background: #000;
+      color: #fff;
+      font-family: 'Tiny5', monospace;
+      font-size: 1.3rem;
+      padding: 4px 10px;
+      border: 1px solid #444;
+      flex-shrink: 0;
+    }
+
+    .article-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #f0f0f0;
+      word-break: break-word;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .card-image-container {
+      width: 100%;
+      height: 150px;
+      background: #121212;
+      margin-bottom: 12px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #2c2c2c;
+      transition: border 0.2s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    .card-image-container:hover img {
+      transform: scale(1.02);
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1a1a1a;
+      color: #777;
+      font-family: 'Tiny5', monospace;
+      font-size: 0.7rem;
+      text-align: center;
+      gap: 6px;
+    }
+
+    .image-placeholder svg {
+      width: 32px;
+      height: 32px;
+      fill: #777;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 150px;
+      margin: 6px 0 10px;
+      background: rgba(13, 13, 13, 0.7);
+      border: 1px solid #2a2a2a;
+    }
+
+    .views-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #aaa;
+      font-family: monospace;
+    }
+
+    .views-count {
+      font-weight: 700;
+      color: #ccc;
+      background: #1e1e1e;
+      padding: 2px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .views-count svg {
+      width: 16px;
+      height: 16px;
+      fill: #aaa;
+      flex-shrink: 0;
+    }
+
+    .card-footer {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.7rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .wiki-link {
+      color: #bbb;
+      text-decoration: none;
+      border: 1px solid #444;
+      padding: 4px 10px;
+      background: #1a1a1a;
+      transition: background 0.2s, color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: monospace;
+    }
+
+    .wiki-link svg {
+      width: 16px;
+      height: 16px;
+      fill: #bbb;
+    }
+
+    .wiki-link:hover {
+      background: #2a2a2a;
+      color: white;
+      border-color: #888;
+    }
+
+    .wiki-link:hover svg {
+      fill: white;
+    }
+
+    .share-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      padding: 4px;
+      text-decoration: none;
+    }
+
+    .share-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .share-btn.twitter svg {
+      fill: #1d9bf0;
+    }
+
+    .share-btn.twitter:hover {
+      background: #1d9bf0;
+      border-color: #1d9bf0;
+    }
+
+    .share-btn.twitter:hover svg {
+      fill: #ffffff;
+    }
+
+    .load-more-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0 40px;
+    }
+
+    .load-more-btn {
+      background: #1a1a1a;
+      color: #ddd;
+      border: 2px solid #444;
+      padding: 12px 32px;
+      font-family: 'Tiny5', monospace;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .load-more-btn:hover {
+      background: #2a2a2a;
+      border-color: #888;
+      color: white;
+    }
+
+    .load-more-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Skeleton styles — NO border radius anywhere */
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: #2a2a2a;
+      margin-bottom: 12px;
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 150%;
+      height: 100%;
+      background: repeating-linear-gradient(90deg,
+          transparent 0px,
+          transparent 6px,
+          #4f4f4f 6px,
+          #4f4f4f 12px);
+      animation: shimmer 1s steps(12) infinite;
+    }
+
+    .skeleton-img {
+      height: 150px;
+      width: 100%;
+      background: #2a2a2a;
+    }
+
+    .skeleton-title {
+      height: 16px;
+      width: 70%;
+      margin-bottom: 10px;
+    }
+
+    .skeleton-text {
+      height: 10px;
+      width: 100%;
+      margin-bottom: 6px;
+    }
+
+    .skeleton-chart {
+      height: 120px;
+      width: 100%;
+      background: #2a2a2a;
+    }
+
+    @keyframes shimmer {
+      0% { left: -150%; }
+      100% { left: 150%; }
+    }
+
+    .loading-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #777;
+      font-family: 'Tiny5', monospace;
+      font-size: 1.2rem;
+      padding: 30px;
+    }
+
+    .error-state {
+      background: rgba(30, 30, 30, 0.85);
+      border: 1px solid #5a3e3e;
+      padding: 16px;
+      color: #cf6679;
+      text-align: center;
+    }
+
+    html[dir="ltr"] .app-wrapper {
+      direction: ltr;
+    }
+
+    html[dir="rtl"] .app-wrapper {
+      direction: rtl;
+    }
+
+    @media (max-width: 700px) {
+      .brand .trends-word {
+        font-size: 1.8rem;
+      }
+      .navbar {
+        padding: 12px 12px;
+      }
+      .trends-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
+      .card-image-container {
+        height: 130px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+  <header class="navbar">
+    <div class="brand">
+      <img src="https://i.ibb.co/kVW6TsRn/restudio.png" alt="RESTUDIO logo">
+      <span class="trends-word">Trends</span>
+    </div>
+    <div class="controls-area">
+      <button id="settingsBtn" class="settings-btn" title="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="m14,18h-1v-1h-2v1h-1v1h-1v2h1v1h1v1h2v-1h1v-1h1v-2h-1v-1Zm-1,3h-2v-2h2v2Z"/>
+          <path d="m14,10h-1v-1h-2v1h-1v1h-1v2h1v1h1v1h2v-1h1v-1h1v-2h-1v-1Zm-1,3h-2v-2h2v2Z"/>
+          <path d="m14,3v-1h-1v-1h-2v1h-1v1h-1v2h1v1h1v1h2v-1h1v-1h1v-2h-1Zm-3,2v-2h2v2h-2Z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button id="closeSettingsBtn" class="modal-close">&times;</button>
+      </div>
+      <div class="setting-group">
+        <span class="setting-label" id="langLabel">Language / اللغة</span>
+        <div class="setting-options">
+          <button id="modalLangAr" class="option-btn" data-lang="ar">AR</button>
+          <button id="modalLangEn" class="option-btn active" data-lang="en">EN</button>
+        </div>
+      </div>
+      <div class="setting-group">
+        <span class="setting-label" id="chartTypeLabel">Chart Type</span>
+        <select id="modalChartTypeSelect" class="chart-type-select">
+          <option value="line">Line</option>
+          <option value="bar">Bar</option>
+          <option value="scatter">Scatter</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <span class="setting-label" id="colorLabel">Color Theme</span>
+        <select id="modalColorThemeSelect" class="chart-type-select">
+          <option value="mono">Mono</option>
+          <option value="blue">Blue</option>
+          <option value="orange">Orange</option>
+          <option value="green">Green</option>
+          <option value="purple">Purple</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-title" id="sectionTitle">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <polygon points="6 13 6 11 7 11 7 10 8 10 8 9 9 9 9 8 10 8 10 9 11 9 11 10 12 10 12 11 13 11 13 12 14 12 14 11 15 11 15 10 16 10 16 9 17 9 17 7 16 7 16 6 15 6 15 5 22 5 22 12 21 12 21 11 20 11 20 10 18 10 18 11 17 11 17 12 16 12 16 13 15 13 15 14 14 14 14 15 13 15 13 14 12 14 12 13 11 13 11 12 10 12 10 11 9 11 9 12 8 12 8 13 6 13"/>
+        <polygon points="23 17 23 20 2 20 2 19 1 19 1 4 4 4 4 17 23 17"/>
+      </svg>
+      Top Articles
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search for an article..." />
+      <button id="searchBtn" class="search-btn">Search</button>
+      <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">Clear Search</button>
+      <select id="regionSelect" class="region-select-main">
+        <option value="ar">العربية (AR)</option>
+        <option value="en" selected>English (EN)</option>
+        <option value="fr">Français (FR)</option>
+        <option value="es">Español (ES)</option>
+        <option value="de">Deutsch (DE)</option>
+        <option value="ja">日本語 (JA)</option>
+        <option value="zh">中文 (ZH)</option>
+        <option value="ru">Русский (RU)</option>
+        <option value="pt">Português (PT)</option>
+        <option value="it">Italiano (IT)</option>
+      </select>
+    </div>
+
+    <div class="info-row">
+      <div class="info-item">
+        <svg viewBox="0 0 24 24"><path d="M21,2V1H17v9H16V9H15V8H14V9H13v1H12V1H4V2H3V3H2V21H3v1H4v1H21V22h1V21H21V20H20V17h1V16h1V2ZM18,21H5V20H4V18H5V17H18Z"/></svg>
+        Wikipedia
+      </div>
+      <div class="info-item">
+        <svg viewBox="0 0 24 24"><path d="m22,9v-2h-1v-2h-1v-1h-1v-1h-2v-1h-2v-1h-6v1h-2v1h-2v1h-1v1h-1v2h-1v2h-1v6h1v2h1v2h1v1h1v1h2v1h2v1h6v-1h2v-1h2v-1h1v-1h1v-2h1v-2h1v-6h-1Zm-13,12v-1h-2v-1h-2v-2h-1v-2h-1v-4h1v1h1v1h1v1h2v3h1v1h1v3h-1Zm6-2h-1v2h-2v-3h-1v-1h-1v-3h-1v-1h-1v-1h-1v-1h-1v-2h1v-1h1v-1h1v-1h3v-1h2v1h1v4h-2v3h-1v-1h-2v2h3v1h4v1h1v3h-1v2Zm5-2h-1v2h-2v1h-1v-1h1v-2h1v-3h-1v-1h-1v-1h-1v-1h-2v-2h1v-1h1v-4h-1v-1h1v1h2v1h2v2h-1v1h-1v1h-1v3h1v1h1v1h1v1h1v2Zm1-4h-2v-1h-1v-3h1v-1h1v1h1v4Z"/></svg>
+        <span id="lastDaysLabel">Last 30 days</span>
+      </div>
+    </div>
+
+    <div id="trendsGrid" class="trends-grid"></div>
+    <div id="loadMoreContainer" class="load-more-container" style="display:none;">
+      <button id="loadMoreBtn" class="load-more-btn">Load More</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const GRID = document.getElementById('trendsGrid');
+    const REGION_SELECT = document.getElementById('regionSelect');
+    const SEARCH_INPUT = document.getElementById('searchInput');
+    const SEARCH_BTN = document.getElementById('searchBtn');
+    const CLEAR_SEARCH_BTN = document.getElementById('clearSearchBtn');
+    const LOAD_MORE_CONTAINER = document.getElementById('loadMoreContainer');
+    const LOAD_MORE_BTN = document.getElementById('loadMoreBtn');
+    const SECTION_TITLE = document.getElementById('sectionTitle');
+    const LAST_DAYS_LABEL = document.getElementById('lastDaysLabel');
+
+    const SETTINGS_BTN = document.getElementById('settingsBtn');
+    const SETTINGS_MODAL = document.getElementById('settingsModal');
+    const CLOSE_SETTINGS_BTN = document.getElementById('closeSettingsBtn');
+    const MODAL_CHART_TYPE = document.getElementById('modalChartTypeSelect');
+    const MODAL_COLOR_THEME = document.getElementById('modalColorThemeSelect');
+    const MODAL_LANG_AR = document.getElementById('modalLangAr');
+    const MODAL_LANG_EN = document.getElementById('modalLangEn');
+    const LANG_LABEL = document.getElementById('langLabel');
+    const CHART_TYPE_LABEL = document.getElementById('chartTypeLabel');
+    const COLOR_LABEL = document.getElementById('colorLabel');
+
+    let currentLanguage = 'en';
+    let currentRegion = 'en';
+    let currentChartType = 'line';
+    let currentColorTheme = 'mono';
+    
+    let fullTrendsList = [];         
+    let displayedCount = 0;
+    const BATCH_SIZE = 12;
+    let isLoadingTrends = false;
+    let isSearchMode = false;
+    const DAYS_RANGE = 30;
+
+    const imageCache = new Map();
+
+    const translations = {
+      ar: { sectionTitle: 'أهم المقالات', searchPlaceholder: 'ابحث عن مقال...', searchBtn: 'بحث', lastDays: 'اخر 30 يوم', views: 'مشاهدة', wikipedia: 'Wikipedia', error: 'تعذر جلب البيانات من Wikipedia API. حاول لاحقاً.', errorGeneral: 'حدث خطأ أثناء تحميل الترندات.', loadMore: 'تحميل المزيد', clearSearch: 'مسح البحث', language: 'اللغة', chartType: 'نوع الرسم', colorTheme: 'نمط الألوان' },
+      en: { sectionTitle: 'Top Articles', searchPlaceholder: 'Search for an article...', searchBtn: 'Search', lastDays: 'Last 30 days', views: 'views', wikipedia: 'Wikipedia', error: 'Could not fetch data from Wikipedia API.', errorGeneral: 'An error occurred while loading trends.', loadMore: 'Load More', clearSearch: 'Clear Search', language: 'Language', chartType: 'Chart Type', colorTheme: 'Color Theme' }
+    };
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      const t = translations[lang];
+      SECTION_TITLE.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polygon points="6 13 6 11 7 11 7 10 8 10 8 9 9 9 9 8 10 8 10 9 11 9 11 10 12 10 12 11 13 11 13 12 14 12 14 11 15 11 15 10 16 10 16 9 17 9 17 7 16 7 16 6 15 6 15 5 22 5 22 12 21 12 21 11 20 11 20 10 18 10 18 11 17 11 17 12 16 12 16 13 15 13 15 14 14 14 14 15 13 15 13 14 12 14 12 13 11 13 11 12 10 12 10 11 9 11 9 12 8 12 8 13 6 13"/><polygon points="23 17 23 20 2 20 2 19 1 19 1 4 4 4 4 17 23 17"/></svg> ${t.sectionTitle}`;
+      SEARCH_INPUT.placeholder = t.searchPlaceholder;
+      SEARCH_BTN.textContent = t.searchBtn;
+      CLEAR_SEARCH_BTN.textContent = t.clearSearch;
+      LAST_DAYS_LABEL.textContent = t.lastDays;
+      LOAD_MORE_BTN.textContent = t.loadMore;
+      LANG_LABEL.textContent = t.language;
+      CHART_TYPE_LABEL.textContent = t.chartType;
+      COLOR_LABEL.textContent = t.colorTheme;
+      MODAL_LANG_AR.classList.toggle('active', lang === 'ar');
+      MODAL_LANG_EN.classList.toggle('active', lang === 'en');
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      updateAllCardsLanguage();
+    }
+
+    function updateAllCardsLanguage() {
+      const t = translations[currentLanguage];
+      document.querySelectorAll('.card').forEach(card => {
+        const lastDaysSpan = card.querySelector('.views-info span:first-child');
+        if (lastDaysSpan) lastDaysSpan.textContent = t.lastDays;
+        const wikiLink = card.querySelector('.wiki-link');
+        if (wikiLink) {
+          const svgIcon = wikiLink.querySelector('svg').outerHTML;
+          wikiLink.innerHTML = `${svgIcon} ${t.wikipedia}`;
+        }
+        const viewsSpan = card.querySelector('.views-count');
+        if (viewsSpan) {
+          const countMatch = viewsSpan.textContent.match(/[\d.]+[KM]?/);
+          const svgIcon = viewsSpan.querySelector('svg')?.outerHTML || '';
+          if (countMatch) viewsSpan.innerHTML = `${svgIcon} ${countMatch[0]} ${t.views}`;
+        }
+      });
+    }
+
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toString();
+    }
+
+    function getDateRange() {
+      const end = new Date();
+      const start = new Date();
+      start.setDate(end.getDate() - DAYS_RANGE);
+      const fmt = (d) => `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+      return { start: fmt(start), end: fmt(end) };
+    }
+
+    async function fetchDailyTop(dateStr, project) {
+      const y = dateStr.substring(0,4), m = dateStr.substring(4,6), d = dateStr.substring(6,8);
+      const resp = await fetch(`https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${project}.wikipedia/all-access/${y}/${m}/${d}`);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      return (data?.items?.[0]?.articles || []).map(a => ({ article: a.article, views: a.views }));
+    }
+
+    async function aggregateTop30(project) {
+      const dateMap = new Map();
+      const dateList = [];
+      let current = new Date(); current.setDate(current.getDate() - DAYS_RANGE);
+      while (current <= new Date()) {
+        const y = current.getFullYear(), m = String(current.getMonth()+1).padStart(2,'0'), d = String(current.getDate()).padStart(2,'0');
+        dateList.push(`${y}${m}${d}`);
+        current.setDate(current.getDate() + 1);
+      }
+      for (const dateStr of dateList) {
+        try {
+          const dayArticles = await fetchDailyTop(dateStr, project);
+          for (const item of dayArticles) {
+            if (!dateMap.has(item.article)) dateMap.set(item.article, { totalViews: 0, daily: {} });
+            const entry = dateMap.get(item.article);
+            entry.totalViews += item.views;
+            entry.daily[dateStr] = (entry.daily[dateStr] || 0) + item.views;
+          }
+          await new Promise(r => setTimeout(r, 40));
+        } catch (e) { console.warn(dateStr, e); }
+      }
+      const list = Array.from(dateMap.entries()).map(([article, data]) => ({ article, totalViews: data.totalViews, daily: data.daily }));
+      list.sort((a,b) => b.totalViews - a.totalViews);
+      return list;
+    }
+
+    async function fetchWikipediaImage(title, lang) {
+      const cacheKey = `${lang}:${title}`;
+      if (imageCache.has(cacheKey)) return imageCache.get(cacheKey);
+      try {
+        const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const imgUrl = data?.thumbnail?.source || null;
+        imageCache.set(cacheKey, imgUrl);
+        return imgUrl;
+      } catch (err) {
+        imageCache.set(cacheKey, null);
+        return null;
+      }
+    }
+
+    function getChartColors() {
+      switch (currentColorTheme) {
+        case 'blue': return { main: '#4fc3f7', area: 'rgba(79,195,247,0.25)' };
+        case 'orange': return { main: '#ffb74d', area: 'rgba(255,183,77,0.25)' };
+        case 'green': return { main: '#81c784', area: 'rgba(129,199,132,0.25)' };
+        case 'purple': return { main: '#ce93d8', area: 'rgba(206,147,216,0.25)' };
+        default: return { main: '#b0b0b0', area: 'rgba(180,180,180,0.15)' };
+      }
+    }
+
+    // Universal chart render: supports line, bar, scatter
+    function renderChart(domElement, dates, views, chartType) {
+      if (!domElement) return;
+      const existing = echarts.getInstanceByDom(domElement);
+      if (existing) existing.dispose();
+      const chart = echarts.init(domElement, 'dark');
+      const colors = getChartColors();
+      let seriesOption;
+      const xAxisOption = { type: 'category', data: dates, show: false };
+      
+      if (chartType === 'bar') {
+        seriesOption = { type: 'bar', data: views, itemStyle: { color: colors.main }, barGap: '30%' };
+      } else if (chartType === 'scatter') {
+        // For scatter, convert to numeric points: [xIndex, yValue]
+        const scatterData = views.map((val, idx) => [idx, val]);
+        seriesOption = { type: 'scatter', data: scatterData, symbolSize: 8, itemStyle: { color: colors.main } };
+        // Override xAxis to type 'value' for proper positioning
+        xAxisOption.type = 'value';
+        xAxisOption.show = false;
+      } else { // line
+        seriesOption = { type: 'line', data: views, symbol: 'none', lineStyle: { color: colors.main, width: 1.5 }, areaStyle: { color: colors.area }, smooth: false };
+      }
+      
+      chart.setOption({
+        grid: { top: 12, right: 12, bottom: 12, left: 12, containLabel: false },
+        xAxis: xAxisOption,
+        yAxis: { type: 'value', show: false },
+        series: [seriesOption],
+        tooltip: { show: false },
+        backgroundColor: 'transparent'
+      });
+      window.addEventListener('resize', () => chart.resize());
+    }
+
+    async function attachImageToCard(cardElement, articleTitle, region) {
+      const imgContainer = cardElement.querySelector('.card-image-container');
+      if (!imgContainer) return;
+      const placeholderDiv = imgContainer.querySelector('.image-placeholder');
+      const imgElement = imgContainer.querySelector('img');
+      const articleUrl = `https://${region}.wikipedia.org/wiki/${encodeURIComponent(articleTitle)}`;
+      imgContainer.style.cursor = 'pointer';
+      imgContainer.addEventListener('click', (e) => { e.stopPropagation(); window.open(articleUrl, '_blank'); });
+      
+      const imageUrl = await fetchWikipediaImage(articleTitle, region);
+      if (imageUrl) {
+        if (placeholderDiv) placeholderDiv.style.display = 'none';
+        imgElement.style.display = 'block';
+        imgElement.src = imageUrl;
+        imgElement.alt = articleTitle.replace(/_/g,' ');
+      } else {
+        if (placeholderDiv) {
+          // Updated icon (image-solid) as requested
+          placeholderDiv.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="#777" xmlns="http://www.w3.org/2000/svg"><polygon points="23 20 23 22 22 22 22 23 2 23 2 22 1 22 1 15 2 15 2 16 3 16 3 17 4 17 4 18 5 18 5 19 6 19 6 20 7 20 7 21 8 21 8 20 9 20 9 19 10 19 10 18 11 18 11 17 12 17 12 16 13 16 13 15 14 15 14 14 15 14 15 13 16 13 16 14 17 14 17 15 18 15 18 16 19 16 19 17 20 17 20 18 21 18 21 19 22 19 22 20 23 20"/><path d="m22,2v-1H2v1h-1v10h1v1h1v1h1v1h1v1h1v1h1v1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v1h1v1h1v1h1v1h1v1h1v1h1v1h1V2h-1Zm-13,4v3h-1v1h-3v-1h-1v-3h1v-1h3v1h1Z"/></svg><span>no image</span>`;
+          placeholderDiv.style.display = 'flex';
+        }
+        imgElement.style.display = 'none';
+      }
+    }
+
+    function createCard(articleData, rank) {
+      const t = translations[currentLanguage];
+      const article = articleData.article;
+      const totalViews = articleData.totalViews;
+      const daily = articleData.daily || {};
+      const sortedDates = Object.keys(daily).sort();
+      const views = sortedDates.map(d => daily[d]);
+      const shortDates = sortedDates.map(d => `${d.slice(6,8)}/${d.slice(4,6)}`);
+      const articleDisplay = article.replace(/_/g,' ');
+      const articleUrl = `https://${currentRegion}.wikipedia.org/wiki/${encodeURIComponent(article)}`;
+      const tweetText = encodeURIComponent(`${articleDisplay} - ${formatNumber(totalViews)} ${t.views} on Wikipedia`);
+      const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(articleUrl)}`;
+      const rankColors = ['#4fc3f7','#ffb74d','#81c784','#e57373','#ba68c8','#4fc3f7','#ffb74d','#81c784','#e57373','#ba68c8','#4fc3f7','#ffb74d'];
+      const rankColor = rankColors[(rank-1) % rankColors.length];
+      const chartId = `chart-${Date.now()}-${rank}-${Math.random()}`;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="rank-badge" style="color:${rankColor}; border-color:${rankColor};">#${rank}</span>
+          <span class="article-title" title="${articleDisplay}">${articleDisplay}</span>
+        </div>
+        <div class="card-image-container" data-article="${article}">
+          <div class="image-placeholder" style="display:flex; align-items:center; justify-content:center; height:100%; gap:6px;">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M21 6h-7.59l3.29-3.29L16 2l-4 4-4-4-.71.71L10.59 6H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H3V8h18v12zM9 10v8l5-4-5-4z"/></svg>
+            <span>loading image...</span>
+          </div>
+          <img style="display:none; width:100%; height:100%; object-fit:cover;" alt="${articleDisplay}">
+        </div>
+        <div class="chart-container" id="${chartId}" data-dates='${JSON.stringify(shortDates)}' data-views='${JSON.stringify(views)}'></div>
+        <div class="views-info">
+          <span>${t.lastDays}</span>
+          <span class="views-count" style="color:${rankColor};"><svg viewBox="0 0 24 24" width="16" height="16"><path d="m22,9v-2h-1v-2h-1v-1h-1v-1h-2v-1h-2v-1h-6v1h-2v1h-2v1h-1v1h-1v2h-1v2h-1v6h1v2h1v2h1v1h1v1h2v1h2v1h6v-1h2v-1h2v-1h1v-1h1v-2h1v-2h1v-6h-1Zm-13,12v-1h-2v-1h-2v-2h-1v-2h-1v-4h1v1h1v1h1v1h2v3h1v1h1v3h-1Zm6-2h-1v2h-2v-3h-1v-1h-1v-3h-1v-1h-1v-1h-1v-1h-1v-2h1v-1h1v-1h1v-1h3v-1h2v1h1v4h-2v3h-1v-1h-2v2h3v1h4v1h1v3h-1v2Zm5-2h-1v2h-2v1h-1v-1h1v-2h1v-3h-1v-1h-1v-1h-1v-1h-2v-2h1v-1h1v-4h-1v-1h1v1h2v1h2v2h-1v1h-1v1h-1v3h1v1h1v1h1v1h1v2Zm1-4h-2v-1h-1v-3h1v-1h1v1h1v4Z"/></svg> ${formatNumber(totalViews)} ${t.views}</span>
+        </div>
+        <div class="card-footer">
+          <div class="footer-left"><a href="${articleUrl}" target="_blank" class="wiki-link"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M21,2V1H17v9H16V9H15V8H14V9H13v1H12V1H4V2H3V3H2V21H3v1H4v1H21V22h1V21H21V20H20V17h1V16h1V2ZM18,21H5V20H4V18H5V17H18Z"/></svg> ${t.wikipedia}</a></div>
+          <div class="footer-right"><a href="${tweetUrl}" target="_blank" class="share-btn twitter"><svg viewBox="0 0 24 24"><rect x="22" y="5" width="1" height="1"/><rect x="22" y="3" width="1" height="1"/><polygon points="21 5 21 6 22 6 22 7 21 7 21 12 20 12 20 14 19 14 19 16 18 16 18 17 17 17 17 18 16 18 16 19 14 19 14 20 11 20 11 21 4 21 4 20 2 20 2 19 1 19 1 18 3 18 3 19 6 19 6 18 7 18 7 17 5 17 5 16 4 16 4 15 3 15 3 14 5 14 5 13 3 13 3 12 2 12 2 10 4 10 4 9 3 9 3 8 2 8 2 4 3 4 3 5 4 5 4 6 5 6 5 7 7 7 7 8 10 8 10 9 12 9 12 5 13 5 13 4 14 4 14 3 19 3 19 4 22 4 22 5 21 5"/></svg></a></div>
+        </div>
+      `;
+      setTimeout(() => {
+        const chartDiv = document.getElementById(chartId);
+        if (chartDiv && views.length) {
+          const storedDates = shortDates;
+          const storedViews = views;
+          renderChart(chartDiv, storedDates, storedViews, currentChartType);
+        }
+        attachImageToCard(card, article, currentRegion);
+      }, 15);
+      return card;
+    }
+
+    function refreshAllCharts() {
+      document.querySelectorAll('.chart-container').forEach(container => {
+        const datesAttr = container.getAttribute('data-dates');
+        const viewsAttr = container.getAttribute('data-views');
+        if (datesAttr && viewsAttr) {
+          try {
+            const dates = JSON.parse(datesAttr);
+            const views = JSON.parse(viewsAttr);
+            renderChart(container, dates, views, currentChartType);
+          } catch(e) {}
+        }
+      });
+    }
+
+    function appendCards(startIdx, count) {
+      const slice = fullTrendsList.slice(startIdx, startIdx + count);
+      slice.forEach((item, i) => {
+        const rank = startIdx + i + 1;
+        GRID.appendChild(createCard(item, rank));
+      });
+      displayedCount = startIdx + slice.length;
+      LOAD_MORE_CONTAINER.style.display = (displayedCount >= fullTrendsList.length) ? 'none' : 'flex';
+    }
+
+    function resetGrid() { GRID.innerHTML = ''; displayedCount = 0; LOAD_MORE_CONTAINER.style.display = 'none'; }
+
+    function renderSkeletons(count = 12) {
+      GRID.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const skel = document.createElement('div'); skel.className = 'card';
+        skel.innerHTML = `<div class="skeleton skeleton-img"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-chart"></div><div class="skeleton skeleton-text"></div>`;
+        GRID.appendChild(skel);
+      }
+    }
+
+    async function loadTrendsList(project) {
+      isLoadingTrends = true; isSearchMode = false;
+      CLEAR_SEARCH_BTN.style.display = 'none';
+      SEARCH_INPUT.value = '';
+      resetGrid();
+      renderSkeletons(12);
+      try {
+        fullTrendsList = await aggregateTop30(project);
+        resetGrid();
+        if (fullTrendsList.length === 0) GRID.innerHTML = `<div class="error-state">${translations[currentLanguage].error}</div>`;
+        else appendCards(0, BATCH_SIZE);
+      } catch (e) { GRID.innerHTML = `<div class="error-state">${translations[currentLanguage].errorGeneral}</div>`; }
+      finally { isLoadingTrends = false; }
+    }
+
+    async function searchArticle(query) {
+      if (!query.trim()) { loadTrendsList(currentRegion); return; }
+      isSearchMode = true; CLEAR_SEARCH_BTN.style.display = 'inline-flex';
+      resetGrid(); renderSkeletons(1);
+      const { start, end } = getDateRange();
+      const url = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${currentRegion}.wikipedia/all-access/user/${encodeURIComponent(query.trim())}/daily/${start}/${end}`;
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error();
+        const data = await resp.json();
+        const items = data.items || [];
+        const totalViews = items.reduce((s,i) => s + i.views, 0);
+        const daily = Object.fromEntries(items.map(i => [i.timestamp, i.views]));
+        GRID.innerHTML = '';
+        const articleData = { article: query.trim(), totalViews, daily };
+        GRID.appendChild(createCard(articleData, 1));
+        LOAD_MORE_CONTAINER.style.display = 'none';
+      } catch { GRID.innerHTML = `<div class="error-state">${translations[currentLanguage].error}</div>`; LOAD_MORE_CONTAINER.style.display = 'none'; }
+    }
+
+    function clearSearch() { isSearchMode = false; CLEAR_SEARCH_BTN.style.display = 'none'; SEARCH_INPUT.value = ''; loadTrendsList(currentRegion); }
+
+    REGION_SELECT.addEventListener('change', (e) => { currentRegion = e.target.value; if (isSearchMode) clearSearch(); else loadTrendsList(currentRegion); });
+    SEARCH_BTN.addEventListener('click', () => searchArticle(SEARCH_INPUT.value));
+    SEARCH_INPUT.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchArticle(SEARCH_INPUT.value); });
+    CLEAR_SEARCH_BTN.addEventListener('click', clearSearch);
+    LOAD_MORE_BTN.addEventListener('click', () => { if (!isSearchMode && fullTrendsList.length > displayedCount) appendCards(displayedCount, BATCH_SIZE); });
+    SETTINGS_BTN.addEventListener('click', () => SETTINGS_MODAL.classList.add('active'));
+    CLOSE_SETTINGS_BTN.addEventListener('click', () => SETTINGS_MODAL.classList.remove('active'));
+    SETTINGS_MODAL.addEventListener('click', (e) => { if (e.target === SETTINGS_MODAL) SETTINGS_MODAL.classList.remove('active'); });
+    
+    MODAL_CHART_TYPE.addEventListener('change', (e) => { currentChartType = e.target.value; refreshAllCharts(); });
+    MODAL_COLOR_THEME.addEventListener('change', (e) => { currentColorTheme = e.target.value; refreshAllCharts(); });
+    
+    MODAL_LANG_AR.addEventListener('click', () => setLanguage('ar'));
+    MODAL_LANG_EN.addEventListener('click', () => setLanguage('en'));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && SETTINGS_MODAL.classList.contains('active')) SETTINGS_MODAL.classList.remove('active'); });
+    setLanguage('en');
+    loadTrendsList('en');
+  })();
+</script>
+</body>
+</html>
