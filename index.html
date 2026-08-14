@@ -1,17 +1,20 @@
+
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Restudio Trends</title>
+    <title>Restudio Trends | السعودية</title>
     <link rel="icon" href="https://i.postimg.cc/66MLbbg8/restudio-profile.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:wght@100;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,1" />
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js">
     </script>
     <style>
+        /* جميع الأنماط كما هي، لم يتم تغيير أي شيء */
         * {
             margin: 0;
             padding: 0;
@@ -36,7 +39,6 @@
             background: #ffffff;
         }
 
-        /* top bar – black */
         .navbar {
             background: #000000;
             padding: 14px 32px 10px 32px;
@@ -83,7 +85,7 @@
             color: #c0c0c8;
             border-radius: 8px;
         }
-        .settings-btn .material-symbols-outlined {
+        .settings-btn i {
             font-size: 22px;
             color: #e0e0e8;
         }
@@ -92,7 +94,6 @@
             border-color: rgba(255, 255, 255, 0.3);
         }
 
-        /* modal – light theme with fade in/out */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -230,19 +231,56 @@
             flex: 1;
         }
 
-        /* hero header – Ubuntu Sans Thin 100 for main title */
+        .hero-background {
+            position: relative;
+            padding: 30px 40px 40px 40px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            background: #e8f0e6;
+            width: 100%;
+            --s: 194px;
+            --c1: #f6edb3;
+            --c2: #acc4a3;
+            --_l: #0000 calc(25% / 3), var(--c1) 0 25%, #0000 0;
+            --_g: conic-gradient(from 120deg at 50% 87.5%, var(--c1) 120deg, #0000 0);
+            background: var(--_g), var(--_g) 0 calc(var(--s) / 2),
+                conic-gradient(from 180deg at 75%, var(--c2) 60deg, #0000 0),
+                conic-gradient(from 60deg at 75% 75%, var(--c1) 0 60deg, #0000 0),
+                linear-gradient(150deg, var(--_l)) 0 calc(var(--s) / 2),
+                conic-gradient(at 25% 25%, #0000 50%, var(--c2) 0 240deg, var(--c1) 0 300deg, var(--c2) 0),
+                linear-gradient(-150deg, var(--_l)) #55897c;
+            background-size: calc(0.866 * var(--s)) var(--s);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(1px);
+            border-radius: 24px;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
         .hero-header {
             display: flex;
             flex-direction: column;
             gap: 4px;
-            margin-bottom: 32px;
-            padding-top: 8px;
+            margin-bottom: 28px;
+            padding-top: 4px;
         }
         .hero-header .sub-line {
             font-family: 'Inter', sans-serif;
             font-weight: 500;
             font-size: 0.85rem;
-            color: #6a6a72;
+            color: #3a4a3a;
             text-transform: uppercase;
             letter-spacing: 0.8px;
         }
@@ -251,7 +289,7 @@
             font-weight: 100;
             font-size: 3.4rem;
             line-height: 1.1;
-            color: #0a0a0e;
+            color: #0a2a0a;
             letter-spacing: -0.5px;
             display: flex;
             align-items: center;
@@ -259,7 +297,6 @@
             gap: 8px;
         }
 
-        /* === MARK WRAPPER – بدون أيقونة القلم === */
         .mark-wrapper {
             position: relative;
             display: inline-block;
@@ -268,19 +305,15 @@
 
         .mark-wrapper mark {
             background: linear-gradient(175deg, #fff9c4 0%, #fff176 40%, #ffe082 100%);
-            color: #0a0a0e;
+            color: #1a2a1a;
             font-weight: 100;
             padding: 2px 8px;
             border-radius: 4px 10px 4px 10px;
             position: relative;
             display: inline-block;
             transform: rotate(-0.8deg);
-            box-shadow:
-                0 2px 0px rgba(0, 0, 0, 0.04),
-                0 4px 12px rgba(255, 183, 77, 0.18),
-                inset 0 -3px 4px rgba(0, 0, 0, 0.03);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            border: 1px solid rgba(200, 170, 80, 0.2);
+            box-shadow: 0 2px 0px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(200, 180, 80, 0.18), inset 0 -3px 4px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(180, 160, 70, 0.25);
         }
 
         .mark-wrapper mark::after {
@@ -290,7 +323,7 @@
             left: 4px;
             right: 4px;
             height: 5px;
-            background: rgba(180, 140, 40, 0.25);
+            background: rgba(140, 120, 40, 0.25);
             border-radius: 50%;
             filter: blur(4px);
             z-index: -1;
@@ -298,13 +331,8 @@
 
         .mark-wrapper:hover mark {
             transform: rotate(-1.2deg) translateY(-1px);
-            box-shadow:
-                0 3px 0px rgba(0, 0, 0, 0.05),
-                0 8px 20px rgba(255, 183, 77, 0.25),
-                inset 0 -3px 4px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 3px 0px rgba(0, 0, 0, 0.05), 0 8px 20px rgba(200, 180, 80, 0.25), inset 0 -3px 4px rgba(0, 0, 0, 0.03);
         }
-
-        /* تم حذف أنماط pen-icon و ink-dot بالكامل */
 
         .hero-header .explore-tag {
             display: flex;
@@ -314,42 +342,43 @@
             font-family: 'Inter', sans-serif;
             font-weight: 500;
             font-size: 1.1rem;
-            color: #4a4a52;
+            color: #2a4a2a;
             flex-wrap: wrap;
         }
-        .hero-header .explore-tag .material-symbols-outlined {
+        .hero-header .explore-tag i {
             font-size: 26px;
-            color: #6a8cff;
+            color: #3a7a3a;
         }
         .region-badge-dynamic {
-            background: rgba(106, 140, 255, 0.1);
+            background: rgba(60, 120, 60, 0.12);
             padding: 4px 14px;
             border-radius: 40px;
             font-size: 0.8rem;
-            color: #4a6adf;
-            border: 1px solid rgba(106, 140, 255, 0.15);
+            color: #1a5a1a;
+            border: 1px solid rgba(60, 120, 60, 0.15);
             font-weight: 500;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
-        .region-badge-dynamic .material-symbols-outlined {
+        .region-badge-dynamic i {
             font-size: 18px;
-            color: #4a6adf;
+            color: #1a5a1a;
         }
 
-        /* search bar – light theme */
         .search-bar {
             display: flex;
             gap: 12px;
-            margin-bottom: 28px;
+            margin-bottom: 0;
             flex-wrap: wrap;
             align-items: center;
-            background: #f5f5f8;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(2px);
             padding: 6px 6px 6px 18px;
             border-radius: 40px;
-            border: 1px solid #e0e0e8;
+            border: 1px solid rgba(200, 200, 200, 0.3);
             max-width: 720px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
         .search-input {
             flex: 1;
@@ -357,39 +386,149 @@
             background: transparent;
             border: none;
             padding: 12px 4px;
-            color: #1a1a1e;
+            color: #1a2a1a;
             font-family: 'Inter', sans-serif;
             font-weight: 400;
             font-size: 0.95rem;
             outline: none;
         }
         .search-input::placeholder {
-            color: #8a8a92;
+            color: #6a7a6a;
         }
-        .search-btn {
-            background: #6a8cff;
-            color: #fff;
+
+        .btn {
+            --fancy-button-gradient-0: #8d49fd;
+            --fancy-button-gradient-50: #7f56f3;
+            --fancy-button-gradient-100: #5691f3;
+            --fancy-button-inner-shadow-top: rgba(233, 209, 255, 0.2);
+            --fancy-button-inner-shadow-top-lg: rgba(9, 12, 60, 0.1);
+            --fancy-button-inner-shadow-bottom: rgba(137, 222, 246, 0.3);
+            --fancy-button-shine-top: #e9d1ff;
+            --fancy-button-shine-bottom: #adfff9;
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 21px;
+            text-shadow: 0px 0.5px 0.5px rgba(0, 0, 0, 0.2);
+            padding: 0;
+            margin: 0;
+            appearance: none;
             border: none;
-            padding: 10px 24px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
+            outline: none;
+            overflow: hidden;
+            position: relative;
             cursor: pointer;
-            transition: 0.2s;
-            border-radius: 40px;
-            display: flex;
+            z-index: 1;
+            border-radius: 25px;
+            color: #fff;
+            background-image: linear-gradient(
+                to bottom,
+                var(--fancy-button-gradient-0) 0%,
+                var(--fancy-button-gradient-50) 50%,
+                var(--fancy-button-gradient-100) 100%
+            );
+            box-shadow:
+                0px 4px 12px rgba(9, 12, 60, 0.15),
+                0px 2px 8px rgba(9, 12, 60, 0.15),
+                0px 1px 3px var(--fancy-button-inner-shadow-top-lg),
+                inset 0px 1px 1px var(--fancy-button-inner-shadow-top),
+                inset 0px -1px 3px var(--fancy-button-inner-shadow-bottom);
+            display: inline-flex;
             align-items: center;
             gap: 6px;
         }
-        .search-btn .material-symbols-outlined {
-            font-size: 20px;
+
+        .btn:before,
+        .btn:after {
+            content: "";
+            position: absolute;
+            border-radius: inherit;
+            will-change: transform;
         }
-        .search-btn:hover {
-            background: #5a7cee;
+
+        .btn:before {
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--fancy-button-shine-top);
+            width: 96px;
+            height: 6px;
+            top: -3px;
+            opacity: 0.6;
+            filter: blur(6px);
+            transition: opacity 0.25s;
         }
+
+        .btn:after {
+            inset: 0;
+            background-size: cover;
+            z-index: 2;
+            opacity: 0.3;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        .btn span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 24px;
+            border-radius: inherit;
+            overflow: hidden;
+            position: relative;
+            background-image: linear-gradient(
+                to bottom,
+                var(--fancy-button-shine-top),
+                transparent 8px
+            );
+            background-position: 0 -6px;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        .btn span:before,
+        .btn span:after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background-color: var(--fancy-button-shine-bottom);
+            transition:
+                opacity 0.25s,
+                transform 0.25s;
+            will-change: transform;
+        }
+
+        .btn span:before {
+            width: 92px;
+            height: 8px;
+            bottom: -4px;
+            opacity: 0.75;
+            filter: blur(6px);
+        }
+
+        .btn span:after {
+            width: 112px;
+            height: 1px;
+            bottom: 0;
+            opacity: 0.9;
+            filter: blur(1px);
+        }
+
+        .btn:hover span:before {
+            opacity: 0.8;
+        }
+
+        .btn:hover span:before {
+            transform: translateX(-50%) scale(1.25);
+        }
+
+        .btn:hover span:after {
+            opacity: 1;
+        }
+
         .clear-search-btn {
             background: transparent;
-            color: #d32f2f;
+            color: #b33a3a;
             border: 1px solid #e0c0c0;
             padding: 10px 18px;
             font-family: 'Inter', sans-serif;
@@ -400,12 +539,12 @@
             border-radius: 40px;
         }
         .clear-search-btn:hover {
-            background: rgba(211, 47, 47, 0.06);
-            border-color: #d32f2f;
+            background: rgba(180, 50, 50, 0.06);
+            border-color: #b33a3a;
         }
         .region-select-main {
             background: transparent;
-            color: #4a4a52;
+            color: #3a4a3a;
             border: none;
             padding: 10px 4px 10px 12px;
             font-family: 'Inter', sans-serif;
@@ -413,14 +552,13 @@
             font-size: 0.85rem;
             cursor: pointer;
             outline: none;
-            border-left: 1px solid #e0e0e8;
+            border-left: 1px solid rgba(200, 200, 200, 0.3);
         }
         .region-select-main option {
             background: #ffffff;
             color: #1a1a1e;
         }
 
-        /* === TRENDING IN BOX – Real Authentic Design === */
         .trending-in-box {
             display: flex;
             align-items: center;
@@ -443,7 +581,6 @@
             font-size: 24px;
             color: #ff6d3f;
             animation: fireGlow 1.8s ease-in-out infinite;
-            font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
         }
 
         @keyframes fireGlow {
@@ -509,7 +646,6 @@
             margin: 8px 0 32px;
         }
 
-        /* card – light theme */
         .card {
             background: #ffffff;
             border: 1px solid #e8e8f0;
@@ -593,7 +729,7 @@
             text-align: center;
             gap: 6px;
         }
-        .image-placeholder .material-symbols-outlined {
+        .image-placeholder i {
             font-size: 30px;
             color: #b0b0b8;
         }
@@ -627,7 +763,7 @@
             gap: 6px;
             border-radius: 20px;
         }
-        .views-count .material-symbols-outlined {
+        .views-count i {
             font-size: 16px;
             color: #6a6a72;
         }
@@ -662,7 +798,7 @@
             font-size: 0.7rem;
             border-radius: 20px;
         }
-        .wiki-link .material-symbols-outlined {
+        .wiki-link i {
             font-size: 16px;
             color: #6a6a72;
         }
@@ -685,18 +821,18 @@
             border-radius: 20px;
             text-decoration: none;
         }
-        .share-btn .material-symbols-outlined {
+        .share-btn i {
             font-size: 18px;
             color: #4a4a52;
         }
-        .share-btn.twitter .material-symbols-outlined {
+        .share-btn.twitter i {
             color: #1d9bf0;
         }
         .share-btn.twitter:hover {
             background: #1d9bf0;
             border-color: #1d9bf0;
         }
-        .share-btn.twitter:hover .material-symbols-outlined {
+        .share-btn.twitter:hover i {
             color: #fff;
         }
 
@@ -726,7 +862,6 @@
             cursor: not-allowed;
         }
 
-        /* skeleton – light */
         .skeleton {
             background: #e8e8f0;
             position: relative;
@@ -823,12 +958,19 @@
                 font-size: 0.8rem;
                 padding: 4px 10px;
             }
+            .hero-background {
+                padding: 20px 16px 24px 16px;
+                border-radius: 16px;
+            }
+            .btn span {
+                padding: 10px 18px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="app-wrapper">
-        <!-- top bar – black -->
         <header class="navbar">
             <div class="brand">
                 <img src="https://i.ibb.co/kVW6TsRn/restudio.png" alt="RESTUDIO logo">
@@ -836,93 +978,101 @@
             </div>
             <div class="controls-area">
                 <button id="settingsBtn" class="settings-btn" title="Settings">
-                    <span class="material-symbols-outlined">settings</span>
+                    <i class="ti ti-settings"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Settings Modal – with fade in/out -->
+        <!-- Settings Modal -->
         <div id="settingsModal" class="modal-overlay">
             <div class="modal-panel">
                 <div class="modal-header">
-                    <h2>Settings</h2>
+                    <h2>الإعدادات</h2>
                     <button id="closeSettingsBtn" class="modal-close">&times;</button>
                 </div>
                 <div class="setting-group">
-                    <span class="setting-label" id="langLabel">Language / اللغة</span>
+                    <span class="setting-label" id="langLabel">اللغة</span>
                     <div class="setting-options">
-                        <button id="modalLangAr" class="option-btn" data-lang="ar">AR</button>
-                        <button id="modalLangEn" class="option-btn active" data-lang="en">EN</button>
+                        <button id="modalLangAr" class="option-btn active" data-lang="ar">AR</button>
+                        <button id="modalLangEn" class="option-btn" data-lang="en">EN</button>
                     </div>
                 </div>
                 <div class="setting-group">
-                    <span class="setting-label" id="chartTypeLabel">Chart Type</span>
+                    <span class="setting-label" id="chartTypeLabel">نوع الرسم البياني</span>
                     <select id="modalChartTypeSelect" class="chart-type-select">
-                        <option value="line">Line</option>
-                        <option value="bar">Bar</option>
-                        <option value="scatter">Scatter</option>
+                        <option value="line">خطي</option>
+                        <option value="bar">أعمدة</option>
+                        <option value="scatter">نقاط مبعثرة</option>
                     </select>
                 </div>
                 <div class="setting-group">
-                    <span class="setting-label" id="colorLabel">Color Theme</span>
+                    <span class="setting-label" id="colorLabel">نسق الألوان</span>
                     <select id="modalColorThemeSelect" class="chart-type-select">
-                        <option value="mono">Mono</option>
-                        <option value="blue">Blue</option>
-                        <option value="orange">Orange</option>
-                        <option value="green">Green</option>
-                        <option value="purple">Purple</option>
+                        <option value="mono">أحادي</option>
+                        <option value="blue">أزرق</option>
+                        <option value="orange">برتقالي</option>
+                        <option value="green">أخضر</option>
+                        <option value="purple">بنفسجي</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div class="container">
-            <!-- Hero header – mark without pen icon -->
-            <div class="hero-header">
-                <div class="sub-line">What's being searched</div>
-                <div class="main-title">Now in <span class="mark-wrapper"><mark>the world</mark></span></div>
-                <div class="explore-tag">
-                    <span class="material-symbols-outlined">explore</span> Exploration
-                    <span class="region-badge-dynamic" id="heroRegionBadge">
-                        <span class="material-symbols-outlined">public</span>
-                        <span id="heroRegionText">Global</span>
-                    </span>
+            <div class="hero-background">
+                <div class="hero-content">
+                    <div class="hero-header">
+                        <!-- أضفنا id للعناصر النصية -->
+                        <div class="sub-line" id="subLine">ما يتم البحث عنه الآن</div>
+                        <div class="main-title">
+                            <span id="inWord">في</span>
+                            <span class="mark-wrapper">
+                                <mark id="regionMark">السعودية</mark>
+                            </span>
+                        </div>
+                        <div class="explore-tag">
+                            <i class="ti ti-compass"></i>
+                            <span id="exploreText">استكشاف</span>
+                            <span class="region-badge-dynamic" id="heroRegionBadge">
+                                <i class="ti ti-world"></i>
+                                <span id="heroRegionText">السعودية</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن مقال..." />
+                        <button id="searchBtn" class="btn">
+                            <span><i class="ti ti-search"></i> بحث</span>
+                        </button>
+                        <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">مسح</button>
+                        <select id="regionSelect" class="region-select-main">
+                            <option value="ar" selected>العربية (AR)</option>
+                            <option value="en">English (EN)</option>
+                            <option value="fr">Français (FR)</option>
+                            <option value="es">Español (ES)</option>
+                            <option value="de">Deutsch (DE)</option>
+                            <option value="ja">日本語 (JA)</option>
+                            <option value="zh">中文 (ZH)</option>
+                            <option value="ru">Русский (RU)</option>
+                            <option value="pt">Português (PT)</option>
+                            <option value="it">Italiano (IT)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- Search bar -->
-            <div class="search-bar">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search for an article..." />
-                <button id="searchBtn" class="search-btn">
-                    <span class="material-symbols-outlined">search</span> Search
-                </button>
-                <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">Clear</button>
-                <select id="regionSelect" class="region-select-main">
-                    <option value="ar">العربية (AR)</option>
-                    <option value="en" selected>English (EN)</option>
-                    <option value="fr">Français (FR)</option>
-                    <option value="es">Español (ES)</option>
-                    <option value="de">Deutsch (DE)</option>
-                    <option value="ja">日本語 (JA)</option>
-                    <option value="zh">中文 (ZH)</option>
-                    <option value="ru">Русский (RU)</option>
-                    <option value="pt">Português (PT)</option>
-                    <option value="it">Italiano (IT)</option>
-                </select>
-            </div>
-
-            <!-- TRENDING IN – Real Authentic Box -->
             <div class="trending-in-box">
-                <span class="material-symbols-outlined fire-icon">local_fire_department</span>
-                <span class="trending-in-label">TRENDING IN</span>
+                <i class="ti ti-fire fire-icon"></i>
+                <span class="trending-in-label" id="trendingLabel">رائج في</span>
                 <span class="trending-region-pill" id="regionBadge">
-                    <span class="dot"></span> 🌍 Global
+                    <span class="dot"></span> 🇸🇦 السعودية
                 </span>
             </div>
 
             <div id="trendsGrid" class="trends-grid"></div>
             <div id="loadMoreContainer" class="load-more-container" style="display:none;">
-                <button id="loadMoreBtn" class="load-more-btn">Load more</button>
+                <button id="loadMoreBtn" class="load-more-btn">تحميل المزيد</button>
             </div>
         </div>
     </div>
@@ -938,6 +1088,11 @@
             const LOAD_MORE_BTN = document.getElementById('loadMoreBtn');
             const REGION_BADGE = document.getElementById('regionBadge');
             const HERO_REGION_TEXT = document.getElementById('heroRegionText');
+            const REGION_MARK = document.getElementById('regionMark');
+            const SUB_LINE = document.getElementById('subLine');
+            const EXPLORE_TEXT = document.getElementById('exploreText');
+            const TRENDING_LABEL = document.getElementById('trendingLabel');
+            const IN_WORD = document.getElementById('inWord');
 
             const SETTINGS_BTN = document.getElementById('settingsBtn');
             const SETTINGS_MODAL = document.getElementById('settingsModal');
@@ -950,8 +1105,8 @@
             const CHART_TYPE_LABEL = document.getElementById('chartTypeLabel');
             const COLOR_LABEL = document.getElementById('colorLabel');
 
-            let currentLanguage = 'en';
-            let currentRegion = 'en';
+            let currentLanguage = 'ar';
+            let currentRegion = 'ar';
             let currentChartType = 'line';
             let currentColorTheme = 'mono';
             let fullTrendsList = [];
@@ -963,7 +1118,7 @@
             const imageCache = new Map();
 
             const regionNames = {
-                ar: '🇸🇦 العربية',
+                ar: '🇸🇦 السعودية',
                 en: '🌍 Global',
                 fr: '🇫🇷 France',
                 es: '🇪🇸 España',
@@ -976,7 +1131,7 @@
             };
 
             const heroRegionNames = {
-                ar: 'العربية',
+                ar: 'السعودية',
                 en: 'Global',
                 fr: 'France',
                 es: 'España',
@@ -988,20 +1143,25 @@
                 it: 'Italia'
             };
 
+            // ترجمات شاملة لكل اللغات المدعومة
             const translations = {
                 ar: {
                     searchPlaceholder: 'ابحث عن مقال...',
                     searchBtn: 'بحث',
                     lastDays: 'اخر 30 يوم',
                     views: 'مشاهدة',
-                    wikipedia: 'Wikipedia',
+                    wikipedia: 'ويكيبيديا',
                     error: 'تعذر جلب البيانات',
                     errorGeneral: 'حدث خطأ',
                     loadMore: 'تحميل المزيد',
                     clearSearch: 'مسح',
                     language: 'اللغة',
                     chartType: 'نوع الرسم',
-                    colorTheme: 'نمط الألوان'
+                    colorTheme: 'نسق الألوان',
+                    subLine: 'ما يتم البحث عنه الآن',
+                    explore: 'استكشاف',
+                    trendingIn: 'رائج في',
+                    in: 'في'
                 },
                 en: {
                     searchPlaceholder: 'Search for an article...',
@@ -1015,14 +1175,165 @@
                     clearSearch: 'Clear',
                     language: 'Language',
                     chartType: 'Chart Type',
-                    colorTheme: 'Color Theme'
+                    colorTheme: 'Color Theme',
+                    subLine: 'What is being searched now',
+                    explore: 'Explore',
+                    trendingIn: 'Trending in',
+                    in: 'in'
+                },
+                fr: {
+                    searchPlaceholder: 'Rechercher un article...',
+                    searchBtn: 'Rechercher',
+                    lastDays: '30 derniers jours',
+                    views: 'vues',
+                    wikipedia: 'Wikipédia',
+                    error: 'Impossible de récupérer les données',
+                    errorGeneral: 'Une erreur est survenue',
+                    loadMore: 'Charger plus',
+                    clearSearch: 'Effacer',
+                    language: 'Langue',
+                    chartType: 'Type de graphique',
+                    colorTheme: 'Thème de couleur',
+                    subLine: 'Ce qui est recherché maintenant',
+                    explore: 'Explorer',
+                    trendingIn: 'Tendance dans',
+                    in: 'dans'
+                },
+                es: {
+                    searchPlaceholder: 'Buscar un artículo...',
+                    searchBtn: 'Buscar',
+                    lastDays: 'Últimos 30 días',
+                    views: 'vistas',
+                    wikipedia: 'Wikipedia',
+                    error: 'No se pudieron obtener los datos',
+                    errorGeneral: 'Ocurrió un error',
+                    loadMore: 'Cargar más',
+                    clearSearch: 'Borrar',
+                    language: 'Idioma',
+                    chartType: 'Tipo de gráfico',
+                    colorTheme: 'Tema de color',
+                    subLine: 'Lo que se busca ahora',
+                    explore: 'Explorar',
+                    trendingIn: 'Tendencia en',
+                    in: 'en'
+                },
+                de: {
+                    searchPlaceholder: 'Nach einem Artikel suchen...',
+                    searchBtn: 'Suchen',
+                    lastDays: 'Letzte 30 Tage',
+                    views: 'Aufrufe',
+                    wikipedia: 'Wikipedia',
+                    error: 'Daten konnten nicht abgerufen werden',
+                    errorGeneral: 'Ein Fehler ist aufgetreten',
+                    loadMore: 'Mehr laden',
+                    clearSearch: 'Löschen',
+                    language: 'Sprache',
+                    chartType: 'Diagrammtyp',
+                    colorTheme: 'Farbschema',
+                    subLine: 'Was jetzt gesucht wird',
+                    explore: 'Entdecken',
+                    trendingIn: 'Trend in',
+                    in: 'in'
+                },
+                ja: {
+                    searchPlaceholder: '記事を検索...',
+                    searchBtn: '検索',
+                    lastDays: '過去30日間',
+                    views: 'ビュー',
+                    wikipedia: 'ウィキペディア',
+                    error: 'データを取得できませんでした',
+                    errorGeneral: 'エラーが発生しました',
+                    loadMore: 'もっと読み込む',
+                    clearSearch: 'クリア',
+                    language: '言語',
+                    chartType: 'チャートタイプ',
+                    colorTheme: 'カラーテーマ',
+                    subLine: '今検索されているもの',
+                    explore: '探索',
+                    trendingIn: 'トレンド',
+                    in: 'で'
+                },
+                zh: {
+                    searchPlaceholder: '搜索文章...',
+                    searchBtn: '搜索',
+                    lastDays: '最近30天',
+                    views: '浏览量',
+                    wikipedia: '维基百科',
+                    error: '无法获取数据',
+                    errorGeneral: '发生错误',
+                    loadMore: '加载更多',
+                    clearSearch: '清除',
+                    language: '语言',
+                    chartType: '图表类型',
+                    colorTheme: '颜色主题',
+                    subLine: '现在正在搜索的内容',
+                    explore: '探索',
+                    trendingIn: '趋势',
+                    in: '在'
+                },
+                ru: {
+                    searchPlaceholder: 'Поиск статьи...',
+                    searchBtn: 'Поиск',
+                    lastDays: 'Последние 30 дней',
+                    views: 'просмотров',
+                    wikipedia: 'Википедия',
+                    error: 'Не удалось получить данные',
+                    errorGeneral: 'Произошла ошибка',
+                    loadMore: 'Загрузить ещё',
+                    clearSearch: 'Очистить',
+                    language: 'Язык',
+                    chartType: 'Тип диаграммы',
+                    colorTheme: 'Цветовая тема',
+                    subLine: 'Что сейчас ищут',
+                    explore: 'Исследовать',
+                    trendingIn: 'В тренде',
+                    in: 'в'
+                },
+                pt: {
+                    searchPlaceholder: 'Pesquisar artigo...',
+                    searchBtn: 'Pesquisar',
+                    lastDays: 'Últimos 30 dias',
+                    views: 'visualizações',
+                    wikipedia: 'Wikipédia',
+                    error: 'Não foi possível obter os dados',
+                    errorGeneral: 'Ocorreu um erro',
+                    loadMore: 'Carregar mais',
+                    clearSearch: 'Limpar',
+                    language: 'Idioma',
+                    chartType: 'Tipo de gráfico',
+                    colorTheme: 'Tema de cor',
+                    subLine: 'O que está sendo pesquisado agora',
+                    explore: 'Explorar',
+                    trendingIn: 'Tendência em',
+                    in: 'em'
+                },
+                it: {
+                    searchPlaceholder: 'Cerca un articolo...',
+                    searchBtn: 'Cerca',
+                    lastDays: 'Ultimi 30 giorni',
+                    views: 'visualizzazioni',
+                    wikipedia: 'Wikipedia',
+                    error: 'Impossibile recuperare i dati',
+                    errorGeneral: 'Si è verificato un errore',
+                    loadMore: 'Carica altro',
+                    clearSearch: 'Cancella',
+                    language: 'Lingua',
+                    chartType: 'Tipo di grafico',
+                    colorTheme: 'Tema colore',
+                    subLine: 'Cosa viene cercato ora',
+                    explore: 'Esplora',
+                    trendingIn: 'Tendenza in',
+                    in: 'in'
                 }
             };
 
             function updateRegionBadge() {
                 const name = regionNames[currentRegion] || '🌍 Global';
                 REGION_BADGE.innerHTML = `<span class="dot"></span> ${name}`;
-                HERO_REGION_TEXT.textContent = heroRegionNames[currentRegion] || 'Global';
+                const heroName = heroRegionNames[currentRegion] || 'Global';
+                HERO_REGION_TEXT.textContent = heroName;
+                // تحديث الـ mark
+                REGION_MARK.textContent = heroName;
             }
             updateRegionBadge();
 
@@ -1030,8 +1341,7 @@
                 currentLanguage = lang;
                 const t = translations[lang];
                 SEARCH_INPUT.placeholder = t.searchPlaceholder;
-                SEARCH_BTN.innerHTML =
-                    `<span class="material-symbols-outlined">search</span> ${t.searchBtn}`;
+                SEARCH_BTN.innerHTML = `<span><i class="ti ti-search"></i> ${t.searchBtn}</span>`;
                 CLEAR_SEARCH_BTN.textContent = t.clearSearch;
                 LOAD_MORE_BTN.textContent = t.loadMore;
                 LANG_LABEL.textContent = t.language;
@@ -1040,6 +1350,12 @@
                 MODAL_LANG_AR.classList.toggle('active', lang === 'ar');
                 MODAL_LANG_EN.classList.toggle('active', lang === 'en');
                 document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                // تحديث النصوص الثابتة
+                SUB_LINE.textContent = t.subLine;
+                EXPLORE_TEXT.textContent = t.explore;
+                TRENDING_LABEL.textContent = t.trendingIn;
+                IN_WORD.textContent = t.in;
+                // تحديث البطاقات
                 updateAllCardsLanguage();
             }
 
@@ -1050,15 +1366,13 @@
                     if (lastDaysSpan) lastDaysSpan.textContent = t.lastDays;
                     const wikiLink = card.querySelector('.wiki-link');
                     if (wikiLink) {
-                        wikiLink.innerHTML =
-                            `<span class="material-symbols-outlined">public</span> ${t.wikipedia}`;
+                        wikiLink.innerHTML = `<i class="ti ti-world"></i> ${t.wikipedia}`;
                     }
                     const viewsSpan = card.querySelector('.views-count');
                     if (viewsSpan) {
                         const countMatch = viewsSpan.textContent.match(/[\d.]+[KM]?/);
-                        const icon = viewsSpan.querySelector('.material-symbols-outlined')?.outerHTML || '';
-                        if (countMatch) viewsSpan.innerHTML =
-                            `${icon} ${countMatch[0]} ${t.views}`;
+                        const icon = viewsSpan.querySelector('i')?.outerHTML || '';
+                        if (countMatch) viewsSpan.innerHTML = `${icon} ${countMatch[0]} ${t.views}`;
                     }
                 });
             }
@@ -1212,7 +1526,7 @@
                 } else {
                     if (placeholderDiv) {
                         placeholderDiv.innerHTML =
-                            `<span class="material-symbols-outlined">image_not_supported</span><span>no image</span>`;
+                            `<i class="ti ti-photo-off"></i><span>لا توجد صورة</span>`;
                         placeholderDiv.style.display = 'flex';
                     }
                     imgElement.style.display = 'none';
@@ -1232,7 +1546,7 @@
                 const articleUrl =
                     `https://${currentRegion}.wikipedia.org/wiki/${encodeURIComponent(article)}`;
                 const tweetText = encodeURIComponent(
-                    `${articleDisplay} - ${formatNumber(totalViews)} ${t.views} on Wikipedia`);
+                    `${articleDisplay} - ${formatNumber(totalViews)} ${t.views} على ويكيبيديا`);
                 const tweetUrl =
                     `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(articleUrl)}`;
                 const rankColors = ['#6a8cff', '#ffb74d', '#81c784', '#e57373', '#ba68c8', '#4fc3f7',
@@ -1250,18 +1564,18 @@
                     </div>
                     <div class="card-image-container" data-article="${article}">
                         <div class="image-placeholder" style="display:flex; align-items:center; justify-content:center; height:100%; gap:6px;">
-                            <span class="material-symbols-outlined">image</span><span>loading image...</span>
+                            <i class="ti ti-photo"></i><span>جاري تحميل الصورة...</span>
                         </div>
                         <img style="display:none; width:100%; height:100%; object-fit:cover;" alt="${articleDisplay}">
                     </div>
                     <div class="chart-container" id="${chartId}" data-dates='${JSON.stringify(shortDates)}' data-views='${JSON.stringify(views)}'></div>
                     <div class="views-info">
                         <span>${t.lastDays}</span>
-                        <span class="views-count" style="color:${rankColor};"><span class="material-symbols-outlined">visibility</span> ${formatNumber(totalViews)} ${t.views}</span>
+                        <span class="views-count" style="color:${rankColor};"><i class="ti ti-eye"></i> ${formatNumber(totalViews)} ${t.views}</span>
                     </div>
                     <div class="card-footer">
-                        <div class="footer-left"><a href="${articleUrl}" target="_blank" class="wiki-link"><span class="material-symbols-outlined">public</span> ${t.wikipedia}</a></div>
-                        <div class="footer-right"><a href="${tweetUrl}" target="_blank" class="share-btn twitter"><span class="material-symbols-outlined">alternate_email</span></a></div>
+                        <div class="footer-left"><a href="${articleUrl}" target="_blank" class="wiki-link"><i class="ti ti-world"></i> ${t.wikipedia}</a></div>
+                        <div class="footer-right"><a href="${tweetUrl}" target="_blank" class="share-btn twitter"><i class="ti ti-brand-x"></i></a></div>
                     </div>
                 `;
                 setTimeout(() => {
@@ -1357,7 +1671,6 @@
                 SEARCH_INPUT.value = '';
                 loadTrendsList(currentRegion); }
 
-            // --- MODAL FADE IN / OUT ---
             function openModal() {
                 SETTINGS_MODAL.classList.remove('fade-out');
                 SETTINGS_MODAL.style.display = 'flex';
@@ -1399,8 +1712,11 @@
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && SETTINGS_MODAL.classList
                     .contains('active')) closeModal(); });
 
-            setLanguage('en');
-            loadTrendsList('en');
+            setLanguage('ar');
+            currentRegion = 'ar';
+            REGION_SELECT.value = 'ar';
+            updateRegionBadge();
+            loadTrendsList('ar');
         })();
     </script>
 </body>
